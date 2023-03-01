@@ -60,7 +60,13 @@ const issueSchema = new mongoose.Schema({
   },
 });
 
+const projectSchema = new mongoose.Schema({
+  project: { type: String, required: true },
+  log: { type: [String], required: true },
+});
+
 const issueModel = mongoose.model('issue', issueSchema);
+const projectModel = mongoose.model('project', projectSchema);
 
 //Sample front-end
 app.route('/:project/').get(function (req, res) {
@@ -76,7 +82,7 @@ app.route('/').get(function (req, res) {
 fccTestingRoutes(app);
 
 //Routing for API
-apiRoutes(app, issueModel);
+apiRoutes(app, issueModel, projectModel);
 
 //404 Not Found Middleware
 app.use(function (req, res, next) {

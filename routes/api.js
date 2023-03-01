@@ -1,14 +1,40 @@
 'use strict';
 
-module.exports = function (app, issueModel) {
+module.exports = function (app, issueModel, projectModel) {
   app
     .route('/api/issues/:project')
 
-    .get(function (req, res) {
-      let project = req.params.project;
-    })
+    .get(function (req, res) {})
 
     .post(function (req, res) {
+      let project = req.params.project;
+      let theProject = projectModel.findOneAndUpdate(
+        { project: project },
+        { $push: { log: ['here goes a issueModel'] } },
+        { upsert: true, new: true },
+        function (err, data) {
+          if (err) return console.error(err);
+          else {
+            //res.json('blah');
+            res.json(data.log.slice(-1));
+          }
+        }
+      );
+      //res.json(testEntry);
+      //issueModel.findOneAndUpdate(
+      //  { issueName: 'anissue' },
+      //  [
+      //    {
+      //      log: ['test'],
+      //      //$set: {
+      //      //  log: { $concat: ['$log', ['new thing']] },
+      //      //},
+      //    },
+      //  ],
+      //  { upsert: true }
+      //);
+
+      /*
       let newIssue = new issueModel({
         issue_title: req.body.issue_title,
         issue_text: req.body.issue_text,
@@ -35,6 +61,7 @@ module.exports = function (app, issueModel) {
           });
         }
       });
+            */
     })
 
     .put(function (req, res) {
