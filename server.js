@@ -25,47 +25,50 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
 });
 
-const issueSchema = new mongoose.Schema({
-  issue_title: {
-    type: String,
-    required: true,
+const issueSchema = new mongoose.Schema([
+  {
+    issue_title: {
+      type: String,
+      required: true,
+    },
+    issue_text: {
+      type: String,
+      required: true,
+    },
+    created_on: {
+      type: String,
+      required: true,
+    },
+    updated_on: {
+      type: String,
+      required: true,
+    },
+    created_by: {
+      type: String,
+      required: true,
+    },
+    assigned_to: {
+      type: String,
+      required: false,
+    },
+    open: {
+      type: Boolean,
+      required: true,
+    },
+    status_text: {
+      type: String,
+      required: false,
+    },
   },
-  issue_text: {
-    type: String,
-    required: true,
-  },
-  created_on: {
-    type: String,
-    required: true,
-  },
-  updated_on: {
-    type: String,
-    required: true,
-  },
-  created_by: {
-    type: String,
-    required: true,
-  },
-  assigned_to: {
-    type: String,
-    required: false,
-  },
-  open: {
-    type: Boolean,
-    required: true,
-  },
-  status_text: {
-    type: String,
-    required: false,
-  },
-});
+]);
+
+const issueModel = mongoose.model('issue', issueSchema);
 
 const projectSchema = new mongoose.Schema({
   project: { type: String, required: true },
-  log: { type: [String], required: true },
+  log: { type: [issueSchema], required: true },
 });
 
-const issueModel = mongoose.model('issue', issueSchema);
 const projectModel = mongoose.model('project', projectSchema);
 
 //Sample front-end
