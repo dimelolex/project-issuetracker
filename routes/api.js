@@ -8,6 +8,16 @@ module.exports = function (app, issueModel, projectModel) {
 
     .post(function (req, res) {
       let project = req.params.project;
+      if (
+        [
+          req.params.project,
+          req.body.issue_title,
+          req.body.issue_text,
+          req.body.created_by,
+        ].includes('')
+      ) {
+        return res.json({ error: 'required field(s) missing' });
+      }
       let newIssue = new issueModel({
         issue_title: req.body.issue_title,
         issue_text: req.body.issue_text,
