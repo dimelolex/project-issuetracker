@@ -91,6 +91,15 @@ module.exports = function (app, issueModel) {
     })
 
     .delete(function (req, res) {
-      let project = req.params.project;
+      if (req.body._id === '') {
+        res.json({ error: 'missing _id' });
+      } else {
+        issueModel.findByIdAndRemove(req.body._id, function (err, data) {
+          if (err) res.json({ error: 'could not delete', _id: req.body._id });
+          else {
+            res.json({ result: 'successfully deleted', _id: req.body._id });
+          }
+        });
+      }
     });
 };
