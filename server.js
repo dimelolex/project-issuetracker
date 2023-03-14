@@ -68,15 +68,6 @@ const issueSchema = new mongoose.Schema([
 
 const issueModel = mongoose.model('issue', issueSchema);
 
-/*
-const projectSchema = new mongoose.Schema({
-  project: { type: String, required: true },
-  log: { type: [issueSchema], required: true },
-});
-
-const projectModel = mongoose.model('project', projectSchema);
-*/
-
 //Sample front-end
 app.route('/:project/').get(function (req, res) {
   res.sendFile(process.cwd() + '/views/issue.html');
