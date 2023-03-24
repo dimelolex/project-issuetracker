@@ -28,7 +28,7 @@ module.exports = function (app, issueModel) {
           req.body.issue_title,
           req.body.issue_text,
           req.body.created_by,
-        ].includes('')
+        ].includes(undefined)
       ) {
         return res.json({ error: 'required field(s) missing' });
       }
@@ -62,7 +62,6 @@ module.exports = function (app, issueModel) {
     })
 
     .put(function (req, res) {
-      let project = req.params.project;
       let queries = { ...req.body };
       delete queries._id;
       queries.updated_on = new Date().toISOString();
@@ -72,8 +71,8 @@ module.exports = function (app, issueModel) {
           delete queries[key];
         }
       }
-      if (req.body._id === '') {
-        res.json({ error: 'missing_id' });
+      if (req.body._id === undefined) {
+        res.json({ error: 'missing _id' });
       } else if (Object.keys(queries).length < 3) {
         res.json({ error: 'no update field(s) sent', _id: req.body._id });
       } else {
@@ -91,7 +90,7 @@ module.exports = function (app, issueModel) {
     })
 
     .delete(function (req, res) {
-      if (req.body._id === '') {
+      if (req.body._id === undefined) {
         res.json({ error: 'missing _id' });
       } else {
         issueModel.findByIdAndRemove(req.body._id, function (err, data) {
