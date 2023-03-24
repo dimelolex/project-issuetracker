@@ -229,23 +229,24 @@ suite('Functional Tests', function () {
   });
 
   test('Delete an issue: DELETE request to /api/issues/{project}', function (done) {
-    module.exports = async function (issueModel) {
-      const toDelete = await issueModel
-        .findOne({ issue_title: 'to delete' })
-        .exec();
-      chai
-        .request(server)
-        .delete('/api/issues/apitest')
-        .send({
-          _id: toDelete._id,
-        })
-        .end(function (err, res) {
-          assert.equal(res.status, 200);
-          assert.equal(res.body.result, 'successfully deleted');
-          assert.equal(res.body._id, toDelete._id);
-        });
-      done();
+    module.exports = function (issueModel) {
+      issueModel.findOne({ issue_title: 'to delete' }, function (err, data) {
+        if (err) return console.error(err);
+        console.log(data);
+        chai
+          .request(server)
+          .delete('/api/issues/apitest')
+          .send({
+            _id: data._id,
+          })
+          .end(function (err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(res.body.result, 'successfully deleted');
+            assert.equal(res.body._id, data._id);
+          });
+      });
     };
+    done();
   });
   test('Delete an issue with an invalid _id: DELETE request to /api/issues/{project}', function (done) {
     chai
