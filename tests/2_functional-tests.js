@@ -8,6 +8,9 @@ const mongoose = require('mongoose');
 chai.use(chaiHttp);
 
 suite('Functional Tests', function () {
+  setTimeout(function () {
+    console.log('timeout to allow tests to pass');
+  }, 5000);
   this.timeout(5000);
   test('Create an issue with every field: POST request to /api/issues/apitest', function (done) {
     chai

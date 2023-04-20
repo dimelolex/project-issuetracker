@@ -67,7 +67,7 @@ module.exports = function (app, issueModel) {
       queries.updated_on = new Date().toISOString();
       queries.open = !req.body.open;
       for (const [key, value] of Object.entries(queries)) {
-        if (value === '') {
+        if (value === undefined) {
           delete queries[key];
         }
       }
@@ -80,7 +80,7 @@ module.exports = function (app, issueModel) {
           req.body._id,
           queries,
           function (err, data) {
-            if (err) res.json({ error: 'could not update', _id: req.body._id });
+            if (err || !data) res.json({ error: 'could not update', _id: req.body._id });
             else {
               res.json({ result: 'successfully updated', _id: req.body._id });
             }
@@ -94,7 +94,7 @@ module.exports = function (app, issueModel) {
         res.json({ error: 'missing _id' });
       } else {
         issueModel.findByIdAndRemove(req.body._id, function (err, data) {
-          if (err) res.json({ error: 'could not delete', _id: req.body._id });
+          if (err || !data) res.json({ error: 'could not delete', _id: req.body._id });
           else {
             res.json({ result: 'successfully deleted', _id: req.body._id });
           }
