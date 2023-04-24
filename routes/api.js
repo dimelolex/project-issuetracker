@@ -80,7 +80,8 @@ module.exports = function (app, issueModel) {
           req.body._id,
           queries,
           function (err, data) {
-            if (err || !data) res.json({ error: 'could not update', _id: req.body._id });
+            if (err || !data)
+              res.json({ error: 'could not update', _id: req.body._id });
             else {
               res.json({ result: 'successfully updated', _id: req.body._id });
             }
@@ -94,7 +95,8 @@ module.exports = function (app, issueModel) {
         res.json({ error: 'missing _id' });
       } else {
         issueModel.findByIdAndRemove(req.body._id, function (err, data) {
-          if (err || !data) res.json({ error: 'could not delete', _id: req.body._id });
+          if (err || !data)
+            res.json({ error: 'could not delete', _id: req.body._id });
           else {
             res.json({ result: 'successfully deleted', _id: req.body._id });
           }

@@ -8,10 +8,6 @@ const mongoose = require('mongoose');
 chai.use(chaiHttp);
 
 suite('Functional Tests', function () {
-  setTimeout(function () {
-    console.log('timeout to allow tests to pass');
-  }, 5000);
-  this.timeout(5000);
   test('Create an issue with every field: POST request to /api/issues/apitest', function (done) {
     chai
       .request(server)
@@ -99,20 +95,21 @@ suite('Functional Tests', function () {
   test('View issues on a project with one filter: GET request to /api/issues/apitest', function (done) {
     chai
       .request(server)
-      .get('/api/issues/apitest?issue_title=test1a')
+      .get('/api/issues/apitest?issue_text=test1b')
       .end(function (err, res) {
         assert.equal(res.status, 200);
         assert.equal(Array.isArray(res.body), true, 'res.body is array');
         assert.equal(typeof res.body[0], 'object', 'res.body[0] is object');
+        assert.property(res.body[0], 'assigned_to');
         assert.equal(
           res.body[0].hasOwnProperty('assigned_to'),
           true,
           'res.body[0] has own property "assigned_to"'
         );
         assert.equal(
-          res.body[0].issue_title,
-          'test1a',
-          'res.body[0].issue_title is "test1a"'
+          res.body[0].issue_text,
+          'test1b',
+          'res.body[0].issue_text is "test1b"'
         );
       });
     done();
@@ -122,7 +119,7 @@ suite('Functional Tests', function () {
     chai
       .request(server)
       .get(
-        '/api/issues/apitest?issue_title=test1a&created_by=test1c&assigned_to=test1d'
+        '/api/issues/apitest?issue_text=test1b&created_by=test1c&assigned_to=test1d'
       )
       .end(function (err, res) {
         assert.equal(res.status, 200);
@@ -134,9 +131,9 @@ suite('Functional Tests', function () {
           'res.body[0] has own property "assigned_to"'
         );
         assert.equal(
-          res.body[0].issue_title,
-          'test1a',
-          'res.body[0].issue_title is "test1a"'
+          res.body[0].issue_text,
+          'test1b',
+          'res.body[0].issue_text is "test1b"'
         );
         assert.equal(
           res.body[0].created_by,
